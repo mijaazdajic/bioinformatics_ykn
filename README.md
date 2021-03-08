@@ -1,2 +1,3 @@
-# bioinformatics_ykn
-scripts for all bioinformatics analyses in the Yellowknife project
+# Statistical Analyses 
+
+This is a repository of the collections of R scritps used to anlayse bioinformatics, chemical, and experimental data from lakes in the Yellowknife area in NWT, Canada.  The results, figures, and dicussion has been published in ______
