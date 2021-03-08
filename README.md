@@ -9,5 +9,16 @@ This script contains the necessary code to import multiple analyses files from I
 
   # Files necessary
   isotope data: .csv file that contains raw ICP-MS results of mercury isotope concentrations from all experiments.  
-  The file has the following headers: "Sample_Name"	"Spike_Conc"	"Volume"	"Weight_sample"	"202_Hg_ug_kg"	"199_Hg_ug_Kg"	"198_Hg_ug_kg"	"Rep"	"Day"	"Month"	"Year"
+  The file has the following headers: 
+  - "Sample_Name"	
+  - "Spike_Conc"	
+  - "Volume"	
+  - "Weight_sample"	
+  - "202_Hg_ug_kg"	
+  - "199_Hg_ug_Kg"	
+  - "198_Hg_ug_kg"	
+  - "Rep"	
+  - "Day"	
+  - "Month"
+  - "Year"
 
