@@ -7,7 +7,7 @@ This is a repository of the collections of R scritps used to anlayse bioinformat
 
 This script contains the necessary code to import multiple analyses files from ICP-MS mercury isotope anlysis, files for sediment moisture content, and isotope spike information.  The result from this script is a large dataframe with all the necessary information orgranized in a manner approprite for statistical anlayses and vizualizations.
 
-  # Files necessary
+  ## Files necessary
   isotope data: .csv file that contains raw ICP-MS results of mercury isotope concentrations from all experiments.  
   The file has the following headers: 
   - "Sample_Name"	
