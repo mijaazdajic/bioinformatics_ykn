@@ -4,13 +4,16 @@
 ###############################################################################################
 
 #####make a theme###########
-theme_incubation <- theme(panel.background = element_rect(fill = "white", linetype = "solid", colour = "black"), 
-                   legend.key = element_rect(fill = "white"), panel.grid.minor = element_blank(), panel.grid.major = element_blank(), 
-                   axis.text=element_text(size=17),                                               #axis numbers
-                   plot.title=element_text(size=30, hjust=-0.35),                                 #Main title      --> to center title, hjust=0.5, to left align -0.2
-                   legend.title = element_text(size = 16, colour = "black", angle = 0),           #Legend title
-                   legend.text = element_text(size = 14, colour = "black", angle = 0),            #Legend text
-                   strip.text.x = element_text(size = 20, colour = "black", angle = 0, vjust = 1),        #Facet x text size
+theme_incubation <- theme(panel.background = element_rect(fill = "white", linetype = "solid", 
+                                                          colour = "black"), 
+                   legend.key = element_rect(fill = "white"), panel.grid.minor = element_blank(), 
+                          panel.grid.major = element_blank(), 
+                   axis.text=element_text(size=17),                 #axis numbers
+                   plot.title=element_text(size=30, hjust=-0.35),   #Main title      --> to center title, hjust=0.5, to left align -0.2
+                   legend.title = element_text(size = 16, colour = "black", angle = 0), #Legend title
+                   legend.text = element_text(size = 14, colour = "black", angle = 0),  #Legend text
+                   strip.text.x = element_text(size = 20, colour = "black", 
+                                               angle = 0, vjust = 1),        #Facet x text size
                    strip.text.y = element_text(size = 20, colour = "black", angle = 270),
                    strip.background = element_blank(),
                    panel.border = element_blank())   
@@ -95,7 +98,8 @@ for (i in 1:length(var_list)) {
   incubation.temp <- incubation.sp[incubation.sp$lake_name==var_list[i],] #make a temporary file, with info about that lake
   spiked.temp <- spiked_conc[spiked_conc$lake_name==var_list[i],]
   
-  methylation <- ggplot(data = incubation.temp, aes(x=as.numeric(time), y=X199_corrected_fixed_Conc, shape = Rep)) +
+  methylation <- ggplot(data = incubation.temp, aes(x=as.numeric(time), 
+                                                    y=X199_corrected_fixed_Conc, shape = Rep)) +
     geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
     geom_vline(xintercept = 48, colour='#457b9d', size=2) +
     geom_line() +
@@ -103,10 +107,12 @@ for (i in 1:length(var_list)) {
     labs(x = "Time (hour)", y = 'Me198Hg Conc (ug/kg)') +
     theme_incubation
   
-  demethylation = ggplot(data = incubation.temp, aes(x=as.numeric(time), y=X198_corrected_fixed_Conc, shape = Rep)) +
+  demethylation = ggplot(data = incubation.temp, aes(x=as.numeric(time), 
+                                                     y=X198_corrected_fixed_Conc, shape = Rep)) +
     geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
     geom_vline(xintercept = 48, colour='#457b9d', size=2) +
-    geom_hline(aes(yintercept = spiked.temp$spiked_con, colour="#E63946"), data=spiked_conc, show.legend = F) + #
+    geom_hline(aes(yintercept = spiked.temp$spiked_con, colour="#E63946"), 
+               data=spiked_conc, show.legend = F) + #
     expand_limits(x = 0, y = 0) +
     geom_line() +
     geom_point() +
@@ -211,10 +217,13 @@ for (i in 1:length(var_list)) {
   incubation.temp <- incubation_mean[incubation_mean$lake_name==var_list[i],] #make a temporary file, with info about that lake
   spiked.temp <- spiked_ICP[spiked_ICP$lake_name==var_list[i],] #make a temporary file with spiked data for specific lake
   spike <- pull(spiked.temp,corrected_ICP) #pull up the concentration
-  initial.spike <- incubation.temp %>% subset(.,time==0) %>% pull(.,X198_corrected_fixed_Conc) #pull up the analysed cocentration of 198 at time 0
-  recovery <- as.numeric(initial.spike/spike*100) %>% format(round(.,6)) #caculate the % recovery
+  initial.spike <- incubation.temp %>% subset(.,time==0) %>% 
+  pull(.,X198_corrected_fixed_Conc) #pull up the analysed cocentration of 198 at time 0
+  recovery <- as.numeric(initial.spike/spike*100) %>% 
+  format(round(.,6)) #caculate the % recovery
   
-  methylation <- ggplot(data = incubation.temp, aes(x=as.numeric(time), y=X199_corrected_fixed_Conc)) + 
+  methylation <- ggplot(data = incubation.temp, aes(x=as.numeric(time), 
+                                                    y=X199_corrected_fixed_Conc)) + 
     geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
     geom_vline(xintercept = 48, colour='#457b9d', size=2) +
     geom_line() +
@@ -222,14 +231,17 @@ for (i in 1:length(var_list)) {
     labs(x = "Time (hour)", y = 'Me198Hg Conc (ug/kg)') +
     theme_incubation
   
-  demethylation = ggplot(data = incubation.temp, aes(x=as.numeric(time), y=X198_corrected_fixed_Conc)) +
+  demethylation = ggplot(data = incubation.temp, aes(x=as.numeric(time), 
+                                                     y=X198_corrected_fixed_Conc)) +
     geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
     geom_vline(xintercept = 48, colour='#457b9d', size=2) +
-    geom_hline(aes(yintercept = spiked.temp$corrected_ICP, colour="#E63946"), data=spiked_ICP, show.legend = F) + #
+    geom_hline(aes(yintercept = spiked.temp$corrected_ICP, colour="#E63946"), 
+               data=spiked_ICP, show.legend = F) + #
     expand_limits(x = 0, y = 0) +
     geom_line() +
     geom_point() +
-    geom_label(aes(label = paste("recovery = ", recovery,"%", sep="")), x=40, y=c(spike), label.size = NA) +
+    geom_label(aes(label = paste("recovery = ", recovery,"%", sep="")), 
+               x=40, y=c(spike), label.size = NA) +
     labs(x = "Time (hour)", y = 'Me198Hg Conc (ug/kg)') +
     theme_incubation
   
@@ -241,56 +253,14 @@ for (i in 1:length(var_list)) {
                       label.x = 0.13) 
  figure <- annotate_figure(figure, top = text_grob(var_list[i], size = 14))
   
- ggsave(figure, file=glue(var_list[i],"_Incubation_mean_ICP",".pdf"), dpi = 600, path = "Figures/ICP/")
+ ggsave(figure, file=glue(var_list[i],"_Incubation_mean_ICP",".pdf"), 
+        dpi = 600, path = "Figures/ICP/")
   
   plots[[i]] = figure
   
 }
 
 write.csv(spike_recovery, file = "spike_recovery_ICP.csv")
-------------------------------------------------------------------------------------------------------------------------------------------------
-
-#####Plot without regression lines#####
-#incubation.sp <- incubation.sp[!incubation.sp$lake_name %in% c("YK12","MIJA","BC17"),]
-#spiked_conc <-  spiked_conc[!spiked_conc$lake_name %in% c("YK12","MIJA", "BC17"),]
-#incubation.sp <-  incubation.sp %>% filter(lake_name %in% c("YKN1","YK12","BC20","YK40","BC36","PROSPEROUS","YKW1" ))
-#spiked_conc <- spiked_conc %>% filter(lake_name %in% c("YKN1","YK12","BC20","YK40","BC36","PROSPEROUS", "YKW1"))
-#incubation.sp <- incubation.sp[!incubation.sp$lake_name %in% c("YKN1","YK12","BC20","YK40","BC36","YKW1","PROSPEROUS"),]
-#spiked_conc <-  spiked_conc[!spiked_conc$lake_name %in% c("YKN1","YK12","BC20","YK40","BC36","YKW1","PROSPEROUS"),]
-
-methylation = ggplot(data = incubation.sp, aes(x=as.numeric(time), y=X199_corrected_fixed_Conc, shape = Rep)) + 
-  facet_grid(. ~ lake_name) +
-  geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
-  geom_vline(xintercept = 48, colour='#457b9d', size=2) +
-  geom_line() +
-  geom_point() +
-  labs(x = "Time (hour)", y = 'Me198Hg Conc (ug/kg)') +
-  theme_incubation
 
 
-demethylation = ggplot(data = incubation.sp, aes(x=as.numeric(time), y=X198_corrected_fixed_Conc, shape = Rep)) + 
-  facet_grid_paginate(. ~ lake_name) +
-  geom_vline(xintercept = 24, colour='#a8dadc', size=2) +
-  geom_vline(xintercept = 48, colour='#457b9d', size=2) +
-  geom_hline(aes(yintercept = spiked_ICP, colour="#E63946"), data=spiked_ICP, show.legend = F) +
-  geom_line() +
-  geom_point() +
-  labs(x = "Time (hour)", y = 'Me198Hg Conc (ug/kg)') +
-  theme_incubation
-
-
-
-figure_3 <- ggarrange(methylation,demethylation, nrow = 2,
-                      font.label = list(size = 25),
-                      hjust = 0, vjust = 2,
-                      label.x = 0.13)
-
-figure_3
-
-
-##Find the slope####
-#methylation
-summary(lm(X199_corrected_fixed_Conc~as.numeric(time)+lake_name, data=incubation_mean))
-#demethylation
-incubation_mean = incubation_mean[-c(8),]
-summary(lm(ln.198.~as.numeric(time)+lake_name, data=incubation_mean))
+####-------------------------------------------------- END ------------------------------------------------####
