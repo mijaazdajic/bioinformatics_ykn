@@ -179,7 +179,7 @@ write.csv(rates, file = "incubation_rates_48.csv")
 
 
 # Calculating Rate Constants ----------------------------------------------
-# The caclulations for this section of Km/Kd is found at Zhu et al --------
+# The caclulations for this section of Km/Kd is found at Zhu et al (2018) -
 
 
 
