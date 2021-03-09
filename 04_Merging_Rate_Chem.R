@@ -433,4 +433,4 @@ model <- ggPredict(model.sul, interactive = T) +
   labs(x = "Sulphate (mg/L)", y = 'Methylation Rate Constant (h^-1)')
 
 
-
+########================================================== DONE ================================#################
