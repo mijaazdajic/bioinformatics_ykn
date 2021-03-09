@@ -266,87 +266,8 @@ figure_6 <- rda.plot
 ggsave(figure_6, file="Figure_6.svg", width = 10, height=10, units = "in", path = "Figures/")
 
 
-# Do the same with Unweighted UNIFRAC -------------------------------------
-# Make a distance matrix using UNIFRAC weighted ---------------------------
 
-uwUF.dm<-UniFrac(GP2, weighted = FALSE, fast = TRUE) 
-uwUF.table<-as.matrix(dist(uwUF.dm))
-
-
-# Calculate distance based RDA using Weighted UniFrac distance mat --------
-
-dbRDA<-capscale(uwUF.dm ~ space.trans + DOC + pH + lnsul +
-                  + lnFe + logkd, data=scaled.env, sqrt.dist = T)
-
-plot(dbRDA, main = "dbRDA")
-summary(dbRDA)
-screeplot(dbRDA)
-RsquareAdj(dbRDA)##Variance partition
-
-
-vegan::anova.cca(dbRDA, by="term", step = 200)
-vif.cca(dbRDA) # a vif of more than 10 indicates that a variable is strongly dependent on others
-
-# Do a stepwise regression to find variables that best explain species differeces
-rda.1 <- capscale(uwUF.dm~1, data = scaled.env, sqrt.dist = T)
-mod <- ordistep(rda.1, scope = formula(dbRDA),
-                direction = "both", permutations = 999, trace = T, sqrt.dist = T) #bidirectional selection
-
-mod
-summary(mod)
-anova(mod)
-anova(mod, permutations = 999) #the overall model is significant
-anova(mod, by = "terms", permutations = 999) #space is not significant
-anova(mod, by = "axis", permutations = 999) #the CAP3 is not significant
-
-
-plot(mod)
-summary(mod)
-screeplot(mod)
-RsquareAdj(mod)
-
-# Make plot ---------------------------------------------------------------
-
-smry <- summary(mod)
-scrs <- scores(mod)
-df1  <- data.frame(smry$sites[,1:2]) # site scores for RDA1 and RDA2
-df1$site <- rownames(df1)  #add site names
-df2  <- data.frame(smry$biplot[,1:2])  # mapping environmental variables
-
-name_key <- read_csv("INFO_SHEETS/lake_name_key.csv", local = locale(encoding = "latin1"))
-df1 <- df1 %>% left_join(., name_key, by = "site") %>% column_to_rownames(., var = "site")
-
-
-
-
-xtext <- paste("CAP 1 (", round(smry$concont[[1]][2, 1] * 100, 2), " % of fitted, ", 
-               round(smry$cont[[1]][2, 1] * 100, 2), " % of total variation)", sep = "")
-ytext <- paste("CAP 2 (", round(smry$concont[[1]][2, 2] * 100, 2), " % of fitted, ", 
-               round(smry$cont[[1]][2, 2] * 100, 2), " % of total variation)", sep = "")
-
-
-
-rda.plot <- ggplot(df1, aes(x=CAP1, y=CAP2, colour = lake_name)) + 
-  geom_hline(yintercept=0, linetype="dotted") +
-  geom_vline(xintercept=0, linetype="dotted") +
-  geom_point(size = 8) +
-  geom_text_repel(aes(label=lake_name), colour = "black",size=3, point.padding = 0.25) +
-  geom_segment(data=df2, aes(x=0, xend=CAP1, y=0, yend=CAP2), 
-               color="grey50", arrow=arrow(length=unit(0.01,"npc"))) +
-  geom_text(data=df2, aes(x=CAP1,y=CAP2,label=rownames(df2),
-                          hjust=0.5*(1-sign(CAP1)),vjust=0.5*(1-sign(CAP2))), 
-            color="grey50", size=6) +
-  xlim(-1.5, 1.5) +
-  ylim(-1.5, 1.5) +
-  xlab(xtext) +
-  ylab(ytext) + 
-  coord_fixed() +
-  theme_incubation +
-  theme(legend.position = "right",
-        legend.title = element_blank())
-
-rda.plot
-
+########================================================== DONE ================================#################
 
 
 
