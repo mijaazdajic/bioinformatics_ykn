@@ -25,7 +25,7 @@ njl
 ## [06_Binary_regression_Kd.R](06_Binary_regression_Kd.R)
 
 
-## [06_Importing_QIIME2.R to 07_Importing_QIIME2.R](06_Importing_QIIME2.R to 07_Importing_QIIME2.R)
+## [07_Importing_QIIME2.R](07_Importing_QIIME2.R)
 
 
 ## [08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R](08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R)
