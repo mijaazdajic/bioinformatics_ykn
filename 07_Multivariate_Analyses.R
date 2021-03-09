@@ -32,15 +32,6 @@ subset_2 <- subset(mastersheet, select = c("lake_name", "DOC", "pH", "Sulphate",
   na.omit(.) %>% column_to_rownames(., var="lake_name")
 
 
-# PCA with water chem and rates -------------------------------------------
-chem.pca <- rda(subset_1, scale=TRUE)  # use 'scale=TRUE' to standardise variances
-plot(chem.pca)  # plot the resulting object
-
-vare.rda <- rda(subset_1,scale(subset_1), scale=T)
-vare.rda
-anova(vare.rda)
-
-
 # Arrange data to work with ggplot2 ---------------------------------------
 df <- subset_1
 row.names(df) <- paste(df$lake_name, row.names(df), sep="_") 
@@ -64,7 +55,7 @@ figure = autoplot(df_pca, data = subset_1, colour = "lake_name",
   theme + geom_point(aes(size=5, color="green"))
 
 figure
-ggsave(file="test.pdf", plot=figure, dpi=600) #save the data
+#ggsave(file="test.pdf", plot=figure, dpi=600) #save the data
 
 
 # It seems that arsenic and sulfate are perpendicualr which seems  --------
