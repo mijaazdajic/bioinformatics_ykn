@@ -78,8 +78,6 @@ shapiro.test(step.model$residuals) #did not pass = p=0.03, not great
 
 # Make each boxplot sperately ---------------------------------------------
 
-
-
 # t-test to see if different ----------------------------------------------
 #sulfate
 categorical <- categorical %>% mutate(., logsul = log(Sulphate+1))
