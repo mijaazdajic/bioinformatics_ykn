@@ -1,5 +1,6 @@
 ###############################################################################################
 ###########THIS R SCRIPT IS FOR ANALYSING THE QIIME2 DATA FROM THE PIPELINE####################
+#######This is an constrained anlaysis with all sammples with chem and bioinfo data############
 #####The importing is done with phyloseq, then other pkgs can be use for analysis##############
 ############This is to do contrained ordiation wtih spatial data ##############################
 
