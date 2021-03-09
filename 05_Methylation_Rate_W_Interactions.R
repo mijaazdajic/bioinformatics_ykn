@@ -84,34 +84,6 @@ hist(step.model$resid,freq=F)
 xseq=seq(-5,5,length=200)
 lines(xseq,dnorm(xseq,sd=summary(step.model)$sigma))
 
-
-
-
-
-# test with sulfate interaction -------------------------------------------
-
-#start with scatterplot matrix
-scatterplotMatrix(~log(km_24) + log(Sulphate+1) + log(SUVA_percent) + log(Total_Arsenic_UO) + 
-                    log(proton_M) + log(DOC) + log(Iron_Total) + 
-                    Total_Phophorus_UO + log(Percent_Hg), reg.line = lm,
-                  smooth = TRUE, span = 0.5,
-                  diagonal = "denisty", data = subset_1) #decided to make sure they were normally distributed before anlaysis
-
-subset_1 <- subset_1 %>% mutate(., logkm = log(km_24))
-
-full.model <- lm(logkm ~ log(Sulphate+1) + log(Percent_Hg) + SUVA_percent + 
-                   log(Total_Arsenic_UO) + pH + log(DOC) + log(Iron_Total) + 
-                   Total_Phophorus_UO +
-                   pH:log(Sulphate+1) +
-                   log(Sulphate+1):log(DOC) +
-                   log(Sulphate+1):log(Iron_Total), data = subset_1)
-step.model <- stepAIC(full.model, direction = "both") #no significant
-summary(step.model)
-bptest(step.model,varformula = ~fitted.values(step.model), studentize=T, data=subset_1)
-resettest(step.model, power = 2:3, type = "regressor", data = subset_1)
-shapiro.test(step.model$residuals) #passed
-
-
 # test with sulfate interaction -------------------------------------------
 
 #start with scatterplot matrix
@@ -314,33 +286,10 @@ shapiro.test(model.zero$residuals)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
-
+# this part was done to see if there was a statistical seperation of groups
 # k-means clustering of data ----------------------------------------------
 
 
@@ -364,8 +313,6 @@ str(clusters)
 low <- kdata %>% dplyr::filter(.,group==1)
 
 high <- kdata %>% dplyr::filter(group == 2)
-
-
 
 
 
@@ -553,3 +500,9 @@ summary(step.model)
 bptest(step.model,varformula = ~fitted.values(step.model), studentize=T, data=subset.high)
 resettest(step.model, power = 2:3, type = "regressor", data = high.km)  #not enough points (n=4)
 shapiro.test(step.model$residuals) #passed
+
+
+#in the end, k-means clustering did not add any more insight to the anlayses, therefore, we decided to go with visual clustering
+
+
+########================================================== DONE ================================#################
