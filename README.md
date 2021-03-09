@@ -26,7 +26,7 @@ This script contains the necessary code to import multiple analyses files from I
 
 jkljk;
 
-## [03_Rates and Figures.R](03_Rates and Figures.R)
+## [03_Rates and Figures.R](03_Rates_and_Figures.R)
 
 
 njl
