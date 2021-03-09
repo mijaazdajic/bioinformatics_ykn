@@ -78,229 +78,7 @@ p <- p + theme(legend.title=element_blank(), legend.text = element_blank())
 p
 
 
-
-
-###Unconstrained ordinations
-# Ordinate using Principal Coordinate analysis
-ykn_pcoa <- ordinate(
-  physeq = GP2, 
-  method = "PCoA", 
-  distance = "bray"
-)
-
-# checking the ordination by making a scree plot
-plot_ordination(
-  physeq = GP2,
-  ordination = ykn_pcoa,
-  type="scree")
-
-# Plot PCoA
-plot_ordination(
-  physeq = GP2,
-  ordination = ykn_pcoa,
-  axes=c(1,2),   # this selects which axes to plot from the ordination
-  color = "Sulphate",
-  title = "PCoA of all YKN samples"
-) +
-  geom_point(aes(color = Sulphate), alpha = 0.7, size = 4) +
-  geom_point(colour = "Sulphate", size = 1.5)+
-  geom_text_repel(aes(label = Description))
-
-
-
-#NMDS
-# running ndms on GP2
-GP2_otu_nmds <- ordinate(GP2, "NMDS", "bray")
-
-# printing stress level
-cat("stress is:", GP2_otu_nmds$stress)
-
-
-#ordination plot using the otus, and color by Phylum
-plot_ordination(GP2, GP2_otu_nmds, type="taxa", color="Phylum", title="NMDS ordination - OTUs")
-
-
-#ordination plot using the lakes, and color by Phylum
-plot_ordination(GP2, GP2_otu_nmds,
-                type="samples",
-                color="Sulphate",
-                title="NDMS ordination - Samples") +
-  geom_point(aes(color = Sulphate), alpha = 0.7, size = 4) +
-  geom_point(colour = "grey90", size = 1.5) +
-  geom_text_repel(aes(label = Description)) #NMDS does seem to show a difference in Sulphate along the first axis
-
-#UNIFRAC analysis of community composition
-# creating a distance matrix using unweigthed unifrac distances
-ykn_Unifrac_unweight <- UniFrac(GP2, weighted = FALSE)
-
-# calculation of the NMDS using the unweigthed unifract distances
-ykn_unifrac_unweight_nmds <- ordinate(GP2, "NMDS", ykn_Unifrac_unweight)
-
-cat("stress is:", ykn_unifrac_unweight_nmds$stress) #ideally it would be below 0.01
-
-# Plotting the ordination, 
-p1 <- plot_ordination(GP2, ykn_unifrac_unweight_nmds,
-                      type="samples",
-                      title="NDMS unifrac Unweighted",
-                      label = "Description" # not really needed but can be useful for exploration
-) +
-  geom_point(aes(color = Sulphate), alpha = 0.7, size = 4) +
-  geom_point(colour = "grey90", size = 1.5)
-
-# plotting object p1
-print(p1)
-
-
-## create weighted unifrac ordination and compare with unweighted
-ykn_unifrac_W <- UniFrac(GP2, weighted = TRUE, 
-                           parallel = TRUE)
-# calculation of the NMDS using the unweigthed unifract distances
-ykn_unifrac_W_nmds <- ordinate(GP2, "NMDS", ykn_unifrac_W)
-
-cat("stress is:", ykn_unifrac_W_nmds$stress)
-
-# Plotting the ordination
-p2 <- plot_ordination(GP2, ykn_unifrac_W_nmds,
-                      type="samples",
-                      title="NDMS unifrac Weighted",
-                      label = "Description" # not really needed but can be useful for exploration
-) +
-  geom_point(aes(color = Sulphate), alpha = 0.7, size = 4) +
-  geom_point(colour = "grey90", size = 1.5)
-
-# combine plots p1 and p2 into one figure with the plot_grid command (cowplot)
-figure = plot_grid(p1, p2, labels = c("P1", "P2"), ncol = , nrow = 1, rel_widths=c(2,2))
-
-ggsave(figure, file="UNIFRAC_COMPARE_SULPHATE.svg", dpi = 600, path = "Figures/")
-
-
-
-
-# testing of significance for the unifrac ordinations using ANOSIM --------
-#this is only good for group data type (only used sulphate to try for now)
-# create vector with time point labels for each samples
-ykn_sulphate <- get_variable(GP2, "Sulphate")
-
-# run Anosim on a unweighted Unifrac distance matrix of the mouse_scaled OTU table, with the factor time
-ykn_anosim_UFuW <- anosim(distance(GP2, "unifrac", weighted=FALSE), ykn_sulphate)
-
-# run Anosim on a Weighted Unifrac distance matrix of the mouse_scaled OTU table, with the factor time
-ykn_anosim_UFW <- anosim(distance(GP2, "unifrac", weighted=TRUE), ykn_sulphate)
-
-#plot results
-print(ykn_anosim_UFuW)
-print(ykn_anosim_UFW)
-
-
-
-# Run a PERMANOVA for data (non-perametric analogue to ANOVA) -------------
-# run a permanova test with adonis.
-set.seed(1)
-
-# Calculate unifrac
-ykn_unifrac_W <- phyloseq::distance(GP2, method = "unifrac", weighted=TRUE)
-
-# make a data frame from the scaled sample_data
-sampledf <- data.frame(sample_data(GP2))
-
-# Adonis test
-adonis(ykn_unifrac_W ~ Sulphate, data = sampledf) #there is a sig with DOC
-
-
-# test of Homegeneity of dispersion
-beta <- betadisper(ykn_unifrac_W, sampledf$Sulphate)
-
-# run a permutation test to get a statistic and a significance score
-permutest(beta) #didnt work with DOC, but 0.3 with sulphate
-
-
-# Constrained Ordinations -------------------------------------------------
-
-# constrained ordination test using Correspondence Analysis (CA)
-
-ykn_CA <- ordinate(GP1, "CCA")
-
-# check ordination with a scree plot
-plot_scree(ykn_CA, "Scree plot of ykn scaled Correspondence analysis")
-
-
-
-(p1_CA <- plot_ordination(GP2, ykn_CA, "samples",
-                          color="Description",label="Description") +
-    geom_point(aes(color = Description), alpha = 0.4, size = 4))
-
-
-# Now doing a constrained Correspondence Analysis (CCA), using time
-ykn_CCA <- ordinate(GP2, formula = GP2 ~ Sulphate + DOC, "CCA")
-
-# check ordination with a scree plot
-plot_scree(ykn_CCA, "Scree plot of ykn scaled Constrained Correspondence analysis")
-
-# CCA plot
-CCA_plot <- plot_ordination(GP2, ykn_CCA, type="samples", color="Description", 
-                            label="Description") +
-  geom_point(aes(color = Description), alpha = 0.4, size = 4)
-
-# Now add the environmental variables as arrows into a matrix
-arrowmat <- vegan::scores(ykn_CCA, display = "bp")
-
-# transform matrix into a dataframe, and add labels
-arrowdf <- data.frame(labels = rownames(arrowmat), arrowmat)
-
-
-# Define the arrow aesthetic mapping
-arrow_map <- aes(xend = CCA1, 
-                 yend = CCA2, 
-                 x = 0, 
-                 y = 0,
-                 shape= NULL,
-                 color= NULL,
-                 label=labels)
-
-label_map <- aes(x = 1.2 * CCA1, 
-                 y = 1.2 * CCA2,
-                 shape= NULL,
-                 color= NULL,
-                 label=labels)
-
-arrowhead = arrow(length = unit(0.02, "npc"))
-
-# Make a new graphic
-CCA_plot + 
-  geom_segment(
-    mapping = arrow_map, 
-    size = .5, 
-    data = arrowdf, 
-    color = "gray", 
-    arrow = arrowhead
-  ) + 
-  geom_text(
-    mapping = label_map, 
-    size = 4,  
-    data = arrowdf, 
-    show.legend = FALSE
-  )
-
-# permutational anova test on constrained axes
-anova(ykn_CCA, by="margin")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# qualitative analysis for personal info ----------------------------------
 # prune taxa to only top 5 ------------------------------------------------
 top5 <- prune_taxa(names(sort(taxa_sums(physeq),TRUE)[1:5]), physeq)
 plot_tree(top5)
@@ -325,8 +103,6 @@ print(p)
 
 
 # This section will be from a tutorial online, filtering and analy --------
-#https://bioconductor.org/help/course-materials/2017/BioC2017/Day1/Workshops/Microbiome/MicrobiomeWorkflowII.html#using_phyloseq
-
 
 # Preporcessing data ----------------------------------------------------------
 #RThe most abundant taxa are kept only if they are in the most abundant 20% of taxa 
@@ -362,12 +138,14 @@ physeq <- subset_taxa(physeq, !is.na(Phylum) & !Phylum %in% c("", "uncharacteriz
 prevdf = apply(X = otu_table(physeq),
                MARGIN = ifelse(taxa_are_rows(physeq), yes = 1, no = 2),
                FUN = function(x){sum(x > 0)})
+
 # Add taxonomy and total read counts to this data.frame
 prevdf = data.frame(Prevalence = prevdf,
                     TotalAbundance = taxa_sums(physeq),
                     tax_table(physeq))
 #Compute the total and average prevalences of the features in each phylum
 plyr::ddply(prevdf, "Phylum", function(df1){cbind(mean(df1$Prevalence),sum(df1$Prevalence))})
+
 
 #Filter out samples that have a low count from above
 # Define phyla to filter
@@ -397,7 +175,6 @@ keepTaxa = rownames(prevdf1)[(prevdf1$Prevalence >= prevalenceThreshold)]
 phy2 = prune_taxa(keepTaxa, physeq)
 
 
-
 # Agglomerate taxa --------------------------------------------------------
 #Agglomerate the data features corresponding to closely related taxa
 # How many genera would be present after filtering?
@@ -416,7 +193,6 @@ p3tree = plot_tree(phy3, method = "treeonly",
 
 # group plots together
 grid.arrange(nrow = 1, p2tree, p3tree)
-
 
 
 # Abundance value transformation ------------------------------------------
@@ -529,171 +305,4 @@ plot_ordination(pslog, out.dpcoa.log, color = "Description", label= "Description
   coord_fixed(sqrt(evals[2] / evals[1]))
 
 
--------------------------------------------------------------------------------------------------------------------------
-
-# this sections is just extra thoughts ------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-  
-
-# PCA on ranks ------------------------------------------------------------
-#Microbial abundance data is often heavy-tailed, and sometimes it can be 
-#hard to identify a transformation that brings the data to normality. In 
-#these cases, it can be safer to ignore the raw abundances altogether, 
-#and work instead with ranks.
-#I DONT THINK I WILL USE THIS SECTION
-abund <- otu_table(pslog)
-abund_ranks <- t(apply(abund, 1, rank))
-
-
-abund_ranks <- abund_ranks - 1000
-abund_ranks[abund_ranks < 1] <- 1
-
-
-abund_df <- melt(abund, value.name = "abund") %>%
-  left_join(melt(abund_ranks, value.name = "rank"))
-colnames(abund_df) <- c("sample", "seq", "abund", "rank")
-
-abund_df <- melt(abund, value.name = "abund") %>%
-  left_join(melt(abund_ranks, value.name = "rank"))
-colnames(abund_df) <- c("sample", "seq", "abund", "rank")
-
-sample_ix <- sample(1:nrow(abund_df), 8)
-ggplot(abund_df %>%
-         filter(sample %in% abund_df$sample[sample_ix])) +
-  geom_point(aes(x = abund, y = rank, col = sample),
-             position = position_jitter(width = 0.2), size = 1.5) +
-  labs(x = "Abundance", y = "Thresholded rank") +
-  scale_color_brewer(palette = "Set2")
-
-
-
-
-
-
-# Canonical correspondence ------------------------------------------------
-ps_ccpna <- ordinate(pslog, "CCA", formula = pslog ~ pH + DOC + Sulphate)
-
-ps_scores <- vegan::scores(ps_ccpna)
-
-sites <- data.frame(ps_scores$sites)
-
-sites$SampleID <- rownames(sites)
-
-sites <- sites %>% merge(sample_data(pslog),by= "row.names") %>% column_to_rownames(var = "Row.names")
-
-species <- data.frame(ps_scores$species)
-
-species$otu_id <- seq_along(rownames(otu_table(physeq)))
-
-species <- species %>% merge(tax_table(pslog),by="row.names") %>% column_to_rownames(var = "Row.names")
-
-evals_prop <- 100 * ps_ccpna$CCA$eig[1:2] / sum(ps_ccpna$CA$eig)
-
-
-
-ggplot() +
-  geom_point(data = sites, aes(x = CCA1, y = CCA2), shape = 2, alpha = 0.5) +
-  geom_point(data = species, aes(x = CCA1, y = CCA2, col = Phylum), size = 0.5) +
-  geom_text_repel(data = species %>% filter(CCA2 < -2),
-                  aes(x = CCA1, y = CCA2, label = otu_id),
-                  size = 1.5, segment.size = 0.1) +
-  guides(col = guide_legend(override.aes = list(size = 3))) +
-  labs(x = sprintf("Axis1 [%s%% variance]", round(evals_prop[1], 2)),
-       y = sprintf("Axis2 [%s%% variance]", round(evals_prop[2], 2))) +
-  scale_fill_discrete() +
-  coord_fixed(sqrt(ps_ccpna$CCA$eig[2] / ps_ccpna$CCA$eig[1])*0.45   ) +
-  theme(panel.border = element_rect(color = "#787878", fill = alpha("white", 0)))
-
-
-https://peerj.com/articles/2836/
-  https://www.biorxiv.org/content/10.1101/217919v3.full
-
-
-########Build an NNMD with OTU data and environemntal variables and Km/Kd
-https://rpubs.com/faysmith/fung_soil_survey
-
-# constrained ordination test using Correspondence Analysis (CA)
-
-mouse_CA <- ordinate(top50, "CCA")
-
-# check ordination with a scree plot
-plot_scree(mouse_CA, "Scree plot of YKN microbial analysis")
-
-(p1_CA <- plot_ordination(top50, mouse_CA, "samples",
-                          color="Sulphate", label="Description") +
-    geom_point(aes(color = Sulphate), alpha = 0.4, size = 4))
-
-
-
-# Now doing a constrained Correspondence Analysis (CCA), using time
-mouse_CCA <- ordinate(top50, formula = top50 ~ Sulphate + pH + DOC + Iron_Total, "CCA")
-
-# check ordination with a scree plot
-plot_scree(mouse_CCA, "Scree plot of mouse scaled Constrained Correspondence analysis")
-
-# CCA plot
-CCA_plot <- plot_ordination(top50, mouse_CA, "samples",
-                          color="Sulphate", label="Description") +
-    geom_point(aes(color = Sulphate), alpha = 0.4, size = 4)
-
-# Now add the environmental variables as arrows into a matrix
-arrowmat <- vegan::scores(mouse_CCA, display = "bp")
-
-# transform matrix into a dataframe, and add labels
-arrowdf <- data.frame(labels = rownames(arrowmat), arrowmat)
-
-
-# Define the arrow aesthetic mapping
-arrow_map <- aes(xend = CCA1, 
-                 yend = CCA2, 
-                 x = 0, 
-                 y = 0,
-                 shape= NULL,
-                 color= NULL,
-                 label=labels)
-
-label_map <- aes(x = 1.2 * CCA1, 
-                 y = 1.2 * CCA2,
-                 shape= NULL,
-                 color= NULL,
-                 label=labels)
-
-arrowhead = arrow(length = unit(0.02, "npc"))
-
-# Make a new graphic
-CCA_plot + 
-  geom_segment(
-    mapping = arrow_map, 
-    size = .5, 
-    data = arrowdf, 
-    color = "gray", 
-    arrow = arrowhead
-  ) + 
-  geom_text(
-    mapping = label_map, 
-    size = 4,  
-    data = arrowdf, 
-    show.legend = FALSE
-  )
-
-
-# permutational anova test on constrained axes
-anova(mouse_CCA)
-
-# run envit for testing
-map <- metadata %>% select(Sulphate,pH,Percent_Hg,DOC,Iron_Total)
-ef <- envfit(mouse_CA, map, permutations = 999, na.rm = TRUE)
-
-# plot the ordination data directly using plot
-plot(mouse_CCA, display="sites" )
-
-# overly plot with fitted variables
-plot(ef, p.max= 0.001)
-
-
-# export a csv file of all the samples metadata ------------------------------------
-glom <- tax_glom(GP2, taxrank='Genus')
-dat <- psmelt(glom)
-write.csv(dat, file='otus-genus-with-sample-data.csv')
+########================================================== DONE ================================#################
