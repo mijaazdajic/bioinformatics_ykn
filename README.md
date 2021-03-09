@@ -16,22 +16,22 @@ jkljk;
 
 njl
 
-##[04_Merging_Rate_Chem.R](04_Merging_Rate_Chem.R)
+## [04_Merging_Rate_Chem.R](04_Merging_Rate_Chem.R)
 
 
-##[05_Methylation_Rate_W_Interactions.R](05_Methylation_Rate_W_Interactions.R)
+## [05_Methylation_Rate_W_Interactions.R](05_Methylation_Rate_W_Interactions.R)
 
 
-##[06_Binary_regression_Kd.R](06_Binary_regression_Kd.R)
+## [06_Binary_regression_Kd.R](06_Binary_regression_Kd.R)
 
 
-##[06_Importing_QIIME2.R to 07_Importing_QIIME2.R](06_Importing_QIIME2.R to 07_Importing_QIIME2.R)
+## [06_Importing_QIIME2.R to 07_Importing_QIIME2.R](06_Importing_QIIME2.R to 07_Importing_QIIME2.R)
 
 
-##[08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R](08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R)
+## [08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R](08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R)
 
-##[09_Constrained_Spatial_WITH_Km_Kd.R](09_Constrained_Spatial_WITH_Km_Kd.R)
+## [09_Constrained_Spatial_WITH_Km_Kd.R](09_Constrained_Spatial_WITH_Km_Kd.R)
 
 
 
-##[Figures](https://github.com/mijaazdajic/ykn_R_statistical_anlayses/tree/main/figures)
+## [Figures](https://github.com/mijaazdajic/ykn_R_statistical_anlayses/tree/main/figures)
