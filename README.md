@@ -40,11 +40,23 @@ Second, a t-test was used to analyse if there are any significant differences in
 
 ## [07_Importing_QIIME2.R](07_Importing_QIIME2.R)
 
+This script as well as all scrip 08 and 09 use the results from the bioinformatics pipeline completed in QIIME2.  Please refer to [ykn_QIIME_analysis repository](https://github.com/mijaazdajic/ykn_QIIME_analysis) for the pipeline script.
+
+This code is for importing QIIME2 analysis artifacs (i.e. SVs, metadata, tree, and taxonomy).  The bioinformatic pipeline results were "cleaned/filtered" and normalized before analyses and figures.  Next, microbial abundance was filtered and plotted as bar graphs and PCAs.
+
 
 ## [08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R](08_Constrained_Spatial_All_Samples_NoSUVA_NoPhos.R)
 
+This script is to analyse the microbial community with regards to chemical results.  QIIME2 artifacts were uploaded as well as the "mastersheet".
+A constrained multivariate analysis is done on the microbial community with chemical results as the constraining variables.  
+In addition, variability explained was calculated.
+
 ## [09_Constrained_Spatial_WITH_Km_Kd.R](09_Constrained_Spatial_WITH_Km_Kd.R)
 
-
+This script is to analyse the microbial community with regards to chemical AND INCUBATION (Kd/Km) results.  QIIME2 artifacts were uploaded as well as the "mastersheet".
+A constrained multivariate analysis is done on the microbial community with chemical AND INCUBATION (Kd/Km) results as the constraining variables.  
+In addition, variability explained was calculated.
 
 ## [Figures](https://github.com/mijaazdajic/ykn_R_statistical_anlayses/tree/main/figures)
+
+Folder contains the code for all figures in the MS, excluding Figure which was made in ArcMap.  Figures are all made in ggplot2.
