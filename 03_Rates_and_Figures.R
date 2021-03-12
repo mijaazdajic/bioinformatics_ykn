@@ -1,5 +1,23 @@
-###################THIS SCRIPT IS TO MAKE FIGURES WITH REGRESSION LINES AND RATES###################
+###############################################################################################
+#####THIS R SCRIPT IS FOR PLOTTING INCUBATION RESULTS FROM ICP-MS##############################
+###################THIS SCRIPT IS TO MAKE FIGURES WITH REGRESSION LINES AND RATES##############
+#####Each incubation is saved as a CSV file, with a number, the number key is in the folder####
+###############################################################################################
 
+#####make a theme###########
+theme_incubation <- theme(panel.background = element_rect(fill = "white", linetype = "solid", 
+                                                          colour = "black"), 
+                   legend.key = element_rect(fill = "white"), panel.grid.minor = element_blank(), 
+                          panel.grid.major = element_blank(), 
+                   axis.text=element_text(size=17),                 #axis numbers
+                   plot.title=element_text(size=30, hjust=-0.35),   #Main title      --> to center title, hjust=0.5, to left align -0.2
+                   legend.title = element_text(size = 16, colour = "black", angle = 0), #Legend title
+                   legend.text = element_text(size = 14, colour = "black", angle = 0),  #Legend text
+                   strip.text.x = element_text(size = 20, colour = "black", 
+                                               angle = 0, vjust = 1),        #Facet x text size
+                   strip.text.y = element_text(size = 20, colour = "black", angle = 270),
+                   strip.background = element_blank(),
+                   panel.border = element_blank())   
 
 # Load Libraries ----------------------------------------------------------
 library(tidyverse) # for basic "tidy" workflows and data wrangling
