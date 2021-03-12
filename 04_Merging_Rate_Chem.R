@@ -3,20 +3,6 @@
 #####We will use data made in the last three scripts and a csv file with chem data#############
 ###############################################################################################
 
-
-# Load Libraries ----------------------------------------------------------
-library(tidyverse) # for basic "tidy" workflows and data wrangling
-library(janitor) # lots of help when dealing with non-R-friendly datasets
-library(lubridate) # for working with dates
-library(ggplot2) #plotting
-library(ggpubr) #probably don't need it
-library(car) #for stats stuff like crPLots
-library(lmtest) #for assumptions of reg
-library(MASS) #for stepAIC
-library(lmtest) #residual testing
-library(ggiraphExtra)
-
-
 #####make a theme###########
 theme_incubation <- theme(panel.background = element_rect(fill = "white", 
                                                           linetype = "solid", colour = "black"), 
@@ -35,6 +21,18 @@ theme_incubation <- theme(panel.background = element_rect(fill = "white",
                                                       colour = "black", angle = 270),
                           strip.background = element_blank(),
                           panel.border = element_blank())   
+
+# Load Libraries ----------------------------------------------------------
+library(tidyverse) # for basic "tidy" workflows and data wrangling
+library(janitor) # lots of help when dealing with non-R-friendly datasets
+library(lubridate) # for working with dates
+library(ggplot2) #plotting
+library(ggpubr) #probably don't need it
+library(car) #for stats stuff like crPLots
+library(lmtest) #for assumptions of reg
+library(MASS) #for stepAIC
+library(lmtest) #residual testing
+library(ggiraphExtra)
 
 
 # Load Water Chemistry Data -----------------------------------------------
@@ -281,7 +279,7 @@ plot.sul
 
 ###############################################################################################
 ###############################################################################################
-###############################################################################################
+####################ANALYSIS WITH TWO DIFFERENT GROUPS OF LAKES################################
 ###############################################################################################
 
 
